@@ -15,7 +15,7 @@ COPY package.json .
 RUN npm install
 
 # Copy the remaining file
-# .(this dot store in local ) .(this do copy the all files and store in /app inside container) 
+#.( this dot use for current directory ) .(this do copy the all files and store in /app inside container) 
 
 COPY . .
 
@@ -23,6 +23,6 @@ COPY . .
 
 EXPOSE 3000
 
-# RUN THE web-app
+# RUN THE web-app 
 
 CMD ["node", "app.js"]
