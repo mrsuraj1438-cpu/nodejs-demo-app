@@ -1,0 +1,22 @@
+# CI(continuous Integration) and CD(Continuous Deployment) pipeline for Node.js demo application
+
+name: CI/CD Pipeline
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    # CI
+    code-quality:
+        uses: ./.github/workflows/code-check.yml
+
+    build:
+        needs: code-quality
+        uses: ./.github/workflows/build-and-push.yml
+
+        # CD:
+    deploy-to-server:
+        needs: build
+        uses: ./.github/workflows/deploy-to-server.yml
