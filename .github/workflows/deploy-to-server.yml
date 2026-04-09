@@ -8,25 +8,24 @@ jobs:
         runs-on: ubuntu-latest
         env:
             DOCKERHUB_USER: ${{ vars.DOCKERHUB_USER }}
-            DOCKER_TAG: ${{ github.sha }}
-
+            DOCKER_TAG: ${{ github.event.workflow_run.head_sha }}
         steps:
-            - name: checkout code
+            - name: Check out repository code
               uses: actions/checkout@v5
 
-            - name: ssh to prod server and create for app folder
+            - name: ssh to prod server and create app folder
               uses: appleboy/ssh-action@v1.0.3
               with:
                   host: ${{ secrets.EC2_SSH_HOST }}
-                  username: ${{ secrets.EEC2_SSH_USER }}
-                  key: ${{ secrets.EC2_SSH_PRIVATE_KEY}}
+                  username: ${{ secrets.EC2_SSH_USER }}
+                  key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
                   script: |
                       echo "installing required packages and folder"
                       sudo apt-get update && sudo apt-get install docker.io docker-compose-v2 -y
                       sudo usermod -aG docker $USER  
                       mkdir -p devops
 
-            - name: copy docker-compose file to prod server
+            - name: Copy doker-compose file to prod server
               uses: appleboy/scp-action@v1
               with:
                   host: ${{ secrets.EC2_SSH_HOST }}
@@ -42,8 +41,8 @@ jobs:
                   username: ${{ secrets.EC2_SSH_USER }}
                   key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
                   script: |
-                      echo "running the application"
+                      echo "Running the application"
                       export DOCKERHUB_USER=${{ vars.DOCKERHUB_USER }}
                       export DOCKER_TAG=${{ github.sha }}
-                      ehco "${{secrets.DOCKERHUB_TOKEN}}" | docker login --username $DOCKERHUB_USER --password-stdin
+                      echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username ${{ vars.DOCKERHUB_USER }} --password-stdin
                       cd ~/devops && docker compose down && docker compose up -d --force-recreate --pull always
