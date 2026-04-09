@@ -1,5 +1,5 @@
 services:
   deploy:
-    image: "${DOCKERHUB_USER}/nodesjs-demo-app:latest"
+    image: "${DOCKERHUB_USER}/nodesjs-demo-app:${DOCKER_TAG}"
     ports:
       - "3000:3000"
