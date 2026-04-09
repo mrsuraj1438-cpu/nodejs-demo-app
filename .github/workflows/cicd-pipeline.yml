@@ -15,8 +15,10 @@ jobs:
     build:
         needs: code-quality
         uses: ./.github/workflows/build-and-push.yml
+        secrets: inherit
 
         # CD:
     deploy-to-server:
         needs: build
         uses: ./.github/workflows/deploy-to-server.yml
+        secrets: inherit
