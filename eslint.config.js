@@ -1,4 +1,4 @@
-export default [
+module.exports = [
     {
         files: ["**/*.js"],
         languageOptions: {
@@ -6,12 +6,9 @@ export default [
             sourceType: "commonjs"
         },
         rules: {
-            // Basic best practices
             "no-unused-vars": "warn",
             "no-console": "off",
             "no-undef": "error",
-
-            // Code style (optional but useful)
             semi: ["error", "always"],
             quotes: ["error", "double"]
         }
